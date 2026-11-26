@@ -26,12 +26,12 @@ async function copyCode() {
 </script>
 
 <template>
-  <div class="group relative my-5 overflow-hidden rounded-xl border border-zinc-200/80 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/90">
-    <div class="flex items-center justify-between border-b border-zinc-200/70 px-3.5 py-2 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
-      <span class="font-mono">{{ filename || language || 'code' }}</span>
+  <div class="group relative my-5 overflow-hidden rounded-2xl border border-black/[0.08] bg-[#F6F8FA] dark:border-white/[0.1] dark:bg-[#14161D]">
+    <div class="flex items-center justify-between border-b border-black/[0.06] bg-white/60 px-4 py-2 text-xs text-[#6E6E73] dark:border-white/[0.08] dark:bg-white/[0.03] dark:text-[#A1A1A6]">
+      <span class="font-mono">{{ filename || language || 'text' }}</span>
       <button
         type="button"
-        class="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-medium text-zinc-500 transition hover:bg-zinc-200/70 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+        class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium text-[#6E6E73] transition-colors hover:bg-black/[0.06] hover:text-[#1D1D1F] dark:text-[#A1A1A6] dark:hover:bg-white/10 dark:hover:text-white"
         @click="copyCode"
       >
         <Check v-if="copied" class="h-3 w-3 text-emerald-500" />
@@ -39,6 +39,6 @@ async function copyCode() {
         <span>{{ copied ? '已复制' : '复制' }}</span>
       </button>
     </div>
-    <pre :class="['!my-0 !rounded-none !border-0 overflow-x-auto p-4 text-sm leading-relaxed', $props.class]"><slot /></pre>
+    <pre :class="['!my-0 !rounded-none !border-0 overflow-x-auto p-4 text-[13.5px] leading-relaxed !text-[#1D1D1F] dark:!text-[#E5E5EA]', $props.class]"><slot /></pre>
   </div>
 </template>

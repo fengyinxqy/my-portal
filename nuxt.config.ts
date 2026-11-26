@@ -22,7 +22,7 @@ export default defineNuxtConfig({
         default: 'github-light',
         dark: 'github-dark'
       },
-      preload: ['ts', 'js', 'vue', 'html', 'css', 'bash', 'json', 'yaml', 'markdown']
+      preload: ['ts', 'js', 'vue', 'html', 'css', 'bash', 'json', 'yaml', 'markdown', 'sql']
     },
     markdown: {
       toc: {

@@ -192,8 +192,20 @@
 }
 
 /* Editorial typography */
+.prose :where(h1, h2, h3, h4) a {
+  color: inherit !important;
+  text-decoration: none !important;
+  font-weight: inherit !important;
+}
+
 .prose pre {
-  @apply rounded-xl border border-black/[0.06] dark:border-white/[0.08] !bg-white/70 dark:!bg-[#161619]/80;
+  @apply rounded-xl border border-black/[0.06] dark:border-white/[0.08]
+         !bg-[#F6F8FA] !text-[#1D1D1F]
+         dark:!bg-[#14161D] dark:!text-[#E5E5EA];
+}
+
+.prose pre code {
+  @apply bg-transparent p-0 text-inherit;
 }
 
 .prose code:not(pre code) {
