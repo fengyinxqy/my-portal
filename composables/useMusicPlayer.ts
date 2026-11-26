@@ -211,6 +211,7 @@ let singletonAmbient: AmbientEngine | null = null
 let ambientTickTimer: number | null = null
 let neteaseLoaded = false
 let consecutiveErrors = 0
+let currentFallbackIdx = 0
 
 export function useMusicPlayer() {
   const tracks = useState<MusicTrack[]>('music-tracks', () => [...musicConfig.tracks])
@@ -266,6 +267,16 @@ export function useMusicPlayer() {
         nextTrack(true)
       })
       singletonAudio.addEventListener('error', () => {
+        const track = currentTrack.value
+        const fallbacks = track?.fallbackUrls || []
+        if (singletonAudio && currentFallbackIdx < fallbacks.length) {
+          const nextUrl = fallbacks[currentFallbackIdx++]
+          singletonAudio.src = nextUrl
+          singletonAudio.load()
+          singletonAudio.play().catch(() => {})
+          return
+        }
+
         isLoading.value = false
         consecutiveErrors++
         if (isPlaying.value && consecutiveErrors < tracks.value.length) {
@@ -273,7 +284,7 @@ export function useMusicPlayer() {
           nextTrack(true)
         } else {
           isPlaying.value = false
-          flashTip('音频加载失败')
+          flashTip('音频加载失败，请切换曲目')
         }
       })
     }
@@ -316,13 +327,26 @@ export function useMusicPlayer() {
         const mapped: MusicTrack[] = list
           .filter((item: any) => item?.url)
           .slice(0, 30)
-          .map((item: any, idx: number) => ({
-            id: `netease-${idx}-${item.title || 'track'}`,
-            title: String(item.title || item.name || '未知曲目'),
-            artist: String(item.author || item.artist || '未知歌手'),
-            url: String(item.url),
-            cover: item.pic || item.cover || undefined
-          }))
+          .map((item: any, idx: number) => {
+            const primaryUrl = String(item.url)
+            const idMatch = primaryUrl.match(/[?&]id=(\d+)/)
+            const songId = idMatch?.[1]
+            const fallbackUrls: string[] = []
+            if (songId) {
+              const injahowUrl = `https://api.injahow.cn/meting/?server=netease&type=url&id=${songId}`
+              const outerUrl = `https://music.163.com/song/media/outer/url?id=${songId}.mp3`
+              if (primaryUrl !== injahowUrl) fallbackUrls.push(injahowUrl)
+              fallbackUrls.push(outerUrl)
+            }
+            return {
+              id: `netease-${idx}-${songId || item.title || item.name || 'track'}`,
+              title: String(item.title || item.name || '未知曲目'),
+              artist: String(item.author || item.artist || '未知歌手'),
+              url: primaryUrl,
+              fallbackUrls,
+              cover: item.pic || item.cover || undefined
+            }
+          })
 
         if (mapped.length > 0) {
           tracks.value = mapped
@@ -349,15 +373,22 @@ export function useMusicPlayer() {
       if (!singletonAudio) return
 
       isLoading.value = true
-      if (singletonAudio.src !== new URL(track.url, window.location.origin).href) {
+      const resolvedHref = new URL(track.url, window.location.origin).href
+      if (singletonAudio.error || singletonAudio.src !== resolvedHref) {
+        currentFallbackIdx = 0
         singletonAudio.src = track.url
+        singletonAudio.load()
       }
       singletonAudio.volume = effectiveVolume.value
       try {
         await singletonAudio.play()
         isPlaying.value = true
-      } catch {
-        isPlaying.value = false
+        consecutiveErrors = 0
+      } catch (err: any) {
+        // Ignore AbortError when fallback URL starts loading
+        if (err?.name !== 'AbortError') {
+          isPlaying.value = false
+        }
       } finally {
         isLoading.value = false
       }

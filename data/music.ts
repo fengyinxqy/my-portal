@@ -6,6 +6,8 @@ export interface MusicTrack {
   artist: string
   /** 外部音频或本地 public/audio/xxx.mp3 路径；留空且配置 ambientPreset 时使用内置轻音乐引擎 */
   url?: string
+  /** 备选音频直链（主音频加载失败时自动切换重试） */
+  fallbackUrls?: string[]
   /** 封面图 URL；留空时使用渐变唱片封面 */
   cover?: string
   /** 仅用于内置氛围声景的预设类型 */
@@ -23,10 +25,10 @@ export const musicConfig = {
    */
   neteasePlaylistId: '474275677',
 
-  /** Meting 公共解析接口列表（自动按顺序容错回退） */
+  /** Meting 公共解析接口列表（优先国内可用节点，自动按顺序容错回退） */
   metingApis: [
-    'https://api.i-meto.com/meting/api?server=netease&type=playlist&id={id}',
-    'https://api.injahow.cn/meting/?server=netease&type=playlist&id={id}'
+    'https://api.injahow.cn/meting/?server=netease&type=playlist&id={id}',
+    'https://api.i-meto.com/meting/api?server=netease&type=playlist&id={id}'
   ],
 
   /**
