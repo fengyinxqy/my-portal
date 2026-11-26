@@ -48,11 +48,11 @@ onMounted(() => {
 
 <template>
   <aside v-if="flatLinks.length > 0" class="hidden lg:block">
-    <div class="sticky top-24 rounded-[20px] border border-white/80 bg-white/70 p-4 shadow-glass backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-900/60">
-      <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
-        目录大纲
+    <div class="sticky top-24 rounded-2xl border border-black/[0.06] bg-white p-4 shadow-card dark:border-white/[0.08] dark:bg-[#1C1C1E]">
+      <p class="mb-3 text-xs font-semibold text-[#86868B]">
+        目录
       </p>
-      <ul class="space-y-1.5 text-xs">
+      <ul class="space-y-1 text-xs">
         <li
           v-for="item in flatLinks"
           :key="item.id"
@@ -60,11 +60,11 @@ onMounted(() => {
         >
           <a
             :href="`#${item.id}`"
-            class="block truncate rounded-lg px-2 py-1 transition"
+            class="block truncate rounded-lg px-2 py-1 transition-colors"
             :class="
               activeId === item.id
-                ? 'bg-[#007AFF]/10 font-semibold text-[#007AFF] dark:bg-[#0A84FF]/20 dark:text-[#64B5FF]'
-                : 'text-slate-500 hover:text-[#1D1D1F] dark:text-zinc-400 dark:hover:text-zinc-200'
+                ? 'bg-[#0071E3]/[0.08] font-medium text-[#0071E3] dark:bg-[#2997FF]/15 dark:text-[#2997FF]'
+                : 'text-[#6E6E73] hover:text-[#1D1D1F] dark:text-[#A1A1A6] dark:hover:text-white'
             "
           >
             {{ item.text }}

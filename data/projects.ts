@@ -29,28 +29,28 @@ export interface PortfolioProject {
 
 export const projectTintStyles: Record<ProjectTint, { badge: string; text: string }> = {
   emerald: {
-    badge: 'bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-[0_6px_16px_rgba(16,185,129,0.28)]',
-    text: 'text-emerald-600 dark:text-emerald-400'
+    badge: 'bg-emerald-500/10 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300',
+    text: 'text-[#6E6E73] dark:text-[#A1A1A6]'
   },
   amber: {
-    badge: 'bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-[0_6px_16px_rgba(245,158,11,0.28)]',
-    text: 'text-amber-600 dark:text-amber-400'
+    badge: 'bg-amber-500/10 text-amber-700 dark:bg-amber-400/15 dark:text-amber-300',
+    text: 'text-[#6E6E73] dark:text-[#A1A1A6]'
   },
   rose: {
-    badge: 'bg-gradient-to-br from-rose-400 to-pink-600 text-white shadow-[0_6px_16px_rgba(244,63,94,0.28)]',
-    text: 'text-rose-600 dark:text-rose-400'
+    badge: 'bg-rose-500/10 text-rose-700 dark:bg-rose-400/15 dark:text-rose-300',
+    text: 'text-[#6E6E73] dark:text-[#A1A1A6]'
   },
   indigo: {
-    badge: 'bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-[0_6px_16px_rgba(99,102,241,0.28)]',
-    text: 'text-indigo-600 dark:text-indigo-400'
+    badge: 'bg-[#0071E3]/10 text-[#0071E3] dark:bg-[#2997FF]/15 dark:text-[#2997FF]',
+    text: 'text-[#6E6E73] dark:text-[#A1A1A6]'
   },
   sky: {
-    badge: 'bg-gradient-to-br from-sky-400 to-blue-600 text-white shadow-[0_6px_16px_rgba(14,165,233,0.28)]',
-    text: 'text-sky-600 dark:text-sky-400'
+    badge: 'bg-sky-500/10 text-sky-700 dark:bg-sky-400/15 dark:text-sky-300',
+    text: 'text-[#6E6E73] dark:text-[#A1A1A6]'
   },
   violet: {
-    badge: 'bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-[0_6px_16px_rgba(139,92,246,0.28)]',
-    text: 'text-violet-600 dark:text-violet-400'
+    badge: 'bg-violet-500/10 text-violet-700 dark:bg-violet-400/15 dark:text-violet-300',
+    text: 'text-[#6E6E73] dark:text-[#A1A1A6]'
   }
 }
 

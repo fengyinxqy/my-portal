@@ -28,32 +28,30 @@ watch(() => route.path, () => {
 </script>
 
 <template>
-  <header class="no-print sticky top-3 z-40 mx-auto w-full max-w-5xl px-4 sm:px-6">
-    <div class="glass-pill flex h-14 items-center justify-between px-3 sm:px-4">
-      <NuxtLink to="/" class="group flex items-center gap-2.5 pl-1">
-        <span class="rounded-full p-[1.5px] bg-gradient-to-tr from-[#007AFF] via-[#5856D6] to-[#32ADE6] transition-transform duration-300 ease-apple group-hover:scale-105">
-          <img
-            :src="profile.avatar"
-            :alt="profile.name"
-            class="h-7 w-7 rounded-full object-cover bg-white dark:bg-zinc-900"
-          />
-        </span>
-        <span class="text-sm font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">
+  <header class="no-print sticky top-0 z-40 border-b border-black/[0.06] bg-[#F5F5F7]/80 backdrop-blur-xl backdrop-saturate-150 dark:border-white/[0.08] dark:bg-black/75">
+    <div class="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6">
+      <NuxtLink to="/" class="flex items-center gap-2.5">
+        <img
+          :src="profile.avatar"
+          :alt="profile.name"
+          class="h-7 w-7 rounded-full border border-black/[0.08] object-cover dark:border-white/15"
+        />
+        <span class="text-[15px] font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">
           {{ profile.name }}
         </span>
       </NuxtLink>
 
-      <!-- Apple Segmented Glass Nav -->
-      <nav class="hidden md:flex items-center gap-1 rounded-full bg-slate-900/[0.04] p-1 dark:bg-white/[0.06]">
+      <!-- Desktop nav: Apple clean text links -->
+      <nav class="hidden md:flex items-center gap-1">
         <NuxtLink
           v-for="item in navItems"
           :key="item.to"
           :to="item.to"
-          class="rounded-full px-3.5 py-1 text-[13px] font-medium transition-all duration-200 ease-apple"
+          class="rounded-full px-3.5 py-1.5 text-[13px] transition-colors"
           :class="
             isActive(item.to)
-              ? 'bg-gradient-to-b from-[#1A88FF] to-[#007AFF] text-white shadow-[0_2px_10px_rgba(0,122,255,0.35)]'
-              : 'text-slate-600 hover:text-[#1D1D1F] hover:bg-white/60 dark:text-zinc-300 dark:hover:text-white dark:hover:bg-white/10'
+              ? 'bg-black/[0.06] font-semibold text-[#1D1D1F] dark:bg-white/[0.12] dark:text-white'
+              : 'font-medium text-[#6E6E73] hover:text-[#1D1D1F] dark:text-[#A1A1A6] dark:hover:text-white'
           "
         >
           {{ item.label }}
@@ -61,15 +59,15 @@ watch(() => route.path, () => {
       </nav>
 
       <!-- Actions -->
-      <div class="flex items-center gap-2 pr-0.5">
+      <div class="flex items-center gap-1.5">
         <button
           type="button"
-          class="inline-flex h-8 items-center gap-2 rounded-full border border-white/80 bg-white/75 px-3 text-xs text-slate-500 transition-all duration-200 hover:bg-white hover:text-[#1D1D1F] active:scale-95 dark:border-white/10 dark:bg-white/10 dark:text-zinc-300 dark:hover:bg-white/15 dark:hover:text-white"
+          class="inline-flex h-8 items-center gap-1.5 rounded-full px-2.5 text-xs text-[#6E6E73] transition-colors hover:bg-black/[0.05] hover:text-[#1D1D1F] dark:text-[#A1A1A6] dark:hover:bg-white/[0.08] dark:hover:text-white"
+          aria-label="站内搜索"
           @click="emit('open-search')"
         >
-          <Search class="h-3.5 w-3.5" />
-          <span class="hidden sm:inline">搜索</span>
-          <kbd class="hidden sm:inline rounded-full bg-slate-100/90 px-1.5 py-0.5 font-mono text-[10px] text-slate-500 dark:bg-white/10 dark:text-zinc-300">
+          <Search class="h-4 w-4" />
+          <kbd class="hidden sm:inline rounded border border-black/[0.08] bg-white/80 px-1.5 py-0.5 font-mono text-[10px] text-[#6E6E73] dark:border-white/10 dark:bg-white/10 dark:text-[#A1A1A6]">
             ⌘K
           </kbd>
         </button>
@@ -78,7 +76,7 @@ watch(() => route.path, () => {
 
         <button
           type="button"
-          class="inline-flex md:hidden h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/75 text-slate-600 dark:border-white/10 dark:bg-white/10 dark:text-zinc-300"
+          class="inline-flex md:hidden h-8 w-8 items-center justify-center rounded-full text-[#1D1D1F] transition-colors hover:bg-black/[0.05] dark:text-[#F5F5F7] dark:hover:bg-white/[0.08]"
           aria-label="打开导航菜单"
           @click="mobileOpen = !mobileOpen"
         >
@@ -88,21 +86,21 @@ watch(() => route.path, () => {
       </div>
     </div>
 
-    <!-- Mobile Glass Drawer -->
+    <!-- Mobile nav -->
     <div
       v-if="mobileOpen"
-      class="md:hidden mt-2 rounded-3xl border border-white/85 bg-white/85 p-2 shadow-glass backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-900/85"
+      class="md:hidden border-t border-black/[0.06] bg-white/95 px-4 py-2.5 backdrop-blur-xl dark:border-white/[0.08] dark:bg-[#1C1C1E]/95"
     >
-      <nav class="flex flex-col gap-1">
+      <nav class="flex flex-col gap-0.5">
         <NuxtLink
           v-for="item in navItems"
           :key="item.to"
           :to="item.to"
-          class="rounded-2xl px-4 py-2.5 text-sm font-medium transition"
+          class="rounded-xl px-3.5 py-2.5 text-sm transition-colors"
           :class="
             isActive(item.to)
-              ? 'bg-[#007AFF] text-white'
-              : 'text-slate-600 hover:bg-slate-100/80 dark:text-zinc-300 dark:hover:bg-white/10'
+              ? 'bg-black/[0.05] font-semibold text-[#1D1D1F] dark:bg-white/[0.1] dark:text-white'
+              : 'font-medium text-[#6E6E73] dark:text-[#A1A1A6]'
           "
         >
           {{ item.label }}

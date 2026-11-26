@@ -100,34 +100,34 @@ watch(query, () => {
 <template>
   <Teleport to="body">
     <Transition
-      enter-active-class="transition duration-200 ease-apple"
-      enter-from-class="opacity-0 scale-[0.98]"
-      enter-to-class="opacity-100 scale-100"
-      leave-active-class="transition duration-150 ease-in"
-      leave-from-class="opacity-100 scale-100"
-      leave-to-class="opacity-0 scale-[0.98]"
+      enter-active-class="transition duration-150 ease-out"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="transition duration-100 ease-in"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
     >
       <div
         v-if="modelValue"
-        class="fixed inset-0 z-50 flex items-start justify-center bg-slate-950/30 px-4 pt-[12vh] backdrop-blur-md"
+        class="fixed inset-0 z-50 flex items-start justify-center bg-black/30 px-4 pt-[12vh] backdrop-blur-sm"
         @click.self="close"
       >
         <div
-          class="w-full max-w-xl overflow-hidden rounded-[24px] border border-white/85 bg-white/85 shadow-2xl backdrop-blur-2xl backdrop-saturate-150 ring-1 ring-inset ring-white/80 dark:border-white/15 dark:bg-zinc-900/85 dark:ring-white/10"
+          class="w-full max-w-xl overflow-hidden rounded-2xl border border-black/[0.08] bg-white/95 shadow-2xl backdrop-blur-2xl dark:border-white/[0.12] dark:bg-[#1C1C1E]/95"
           @keydown="handleKeydown"
         >
-          <div class="flex items-center gap-3 border-b border-slate-200/70 px-5 py-3.5 dark:border-white/10">
-            <Search class="h-4 w-4 shrink-0 text-[#007AFF]" />
+          <div class="flex items-center gap-3 border-b border-black/[0.06] px-4 py-3.5 dark:border-white/[0.08]">
+            <Search class="h-4 w-4 shrink-0 text-[#6E6E73]" />
             <input
               ref="inputRef"
               v-model="query"
               type="text"
-              placeholder="Spotlight 搜索博客文章、项目或技术栈..."
-              class="w-full bg-transparent text-sm text-[#1D1D1F] placeholder-slate-400 outline-none dark:text-[#F5F5F7]"
+              placeholder="搜索文章、项目或标签..."
+              class="w-full bg-transparent text-sm text-[#1D1D1F] placeholder-[#86868B] outline-none dark:text-[#F5F5F7]"
             />
             <button
               type="button"
-              class="rounded-full p-1 text-slate-400 transition hover:bg-slate-200/60 hover:text-slate-700 dark:hover:bg-white/10 dark:hover:text-white"
+              class="rounded-full p-1 text-[#86868B] hover:bg-black/[0.05] hover:text-[#1D1D1F] dark:hover:bg-white/10 dark:hover:text-white"
               aria-label="关闭搜索"
               @click="close"
             >
@@ -135,20 +135,20 @@ watch(query, () => {
             </button>
           </div>
 
-          <div class="max-h-80 overflow-y-auto p-2.5">
-            <div v-if="filteredItems.length === 0" class="py-10 text-center text-sm text-slate-500">
-              未找到与「{{ query }}」相关的内容
+          <div class="max-h-80 overflow-y-auto p-2">
+            <div v-if="filteredItems.length === 0" class="py-10 text-center text-sm text-[#6E6E73]">
+              没有找到与「{{ query }}」相关的内容
             </div>
 
             <button
               v-for="(item, idx) in filteredItems"
               :key="item.to + item.title"
               type="button"
-              class="flex w-full items-start gap-3 rounded-2xl px-3.5 py-2.5 text-left transition"
+              class="flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left transition-colors"
               :class="
                 idx === activeIndex
-                  ? 'bg-[#007AFF]/10 text-[#007AFF] dark:bg-[#0A84FF]/20'
-                  : 'hover:bg-white/70 dark:hover:bg-white/5'
+                  ? 'bg-[#0071E3]/[0.08] dark:bg-[#2997FF]/15'
+                  : 'hover:bg-black/[0.03] dark:hover:bg-white/[0.04]'
               "
               @mouseenter="activeIndex = idx"
               @click="selectItem(item)"
@@ -156,25 +156,25 @@ watch(query, () => {
               <component
                 :is="item.type === 'blog' ? FileText : FolderKanban"
                 class="mt-0.5 h-4 w-4 shrink-0"
-                :class="idx === activeIndex ? 'text-[#007AFF]' : 'text-slate-400'"
+                :class="idx === activeIndex ? 'text-[#0071E3] dark:text-[#2997FF]' : 'text-[#86868B]'"
               />
               <div class="min-w-0 flex-1">
                 <div class="flex items-center gap-2">
                   <span class="truncate text-sm font-medium text-[#1D1D1F] dark:text-[#F5F5F7]">
                     {{ item.title }}
                   </span>
-                  <span class="shrink-0 rounded-full bg-slate-200/70 px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:bg-white/10 dark:text-zinc-300">
-                    {{ item.type === 'blog' ? '博客' : '项目' }}
+                  <span class="shrink-0 rounded-full bg-black/[0.05] px-2 py-0.5 text-[10px] font-medium text-[#6E6E73] dark:bg-white/10 dark:text-[#A1A1A6]">
+                    {{ item.type === 'blog' ? '文章' : '项目' }}
                   </span>
                 </div>
-                <p v-if="item.subtitle" class="mt-0.5 truncate text-xs text-slate-500 dark:text-zinc-400">
+                <p v-if="item.subtitle" class="mt-0.5 truncate text-xs text-[#6E6E73] dark:text-[#A1A1A6]">
                   {{ item.subtitle }}
                 </p>
               </div>
             </button>
           </div>
 
-          <div class="flex items-center justify-between border-t border-slate-200/70 px-5 py-2.5 text-[11px] text-slate-400 dark:border-white/10">
+          <div class="hidden sm:flex items-center justify-between border-t border-black/[0.06] px-4 py-2 text-[11px] text-[#86868B] dark:border-white/[0.08]">
             <span>↑↓ 选择 · Enter 打开</span>
             <span>ESC 关闭</span>
           </div>

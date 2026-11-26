@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { MapPin, Sparkles } from 'lucide-vue-next'
+import { MapPin } from 'lucide-vue-next'
 import { nowFocus } from '~/data/now'
 import { formatDate } from '~/utils/readingTime'
 
 useSeoMeta({
-  title: '动态 · Now',
-  description: '记录此时此刻正在专注的事情，以及近期的阶段性进展时间线。'
+  title: '动态',
+  description: '记录最近在做的事情和阶段性进展。'
 })
 
 const { data: timeline } = await useAsyncData('now-timeline', () =>
@@ -18,24 +18,20 @@ const { data: timeline } = await useAsyncData('now-timeline', () =>
 
 <template>
   <div class="space-y-10">
-    <!-- Top Now Focus Section -->
+    <!-- Top Focus Section -->
     <section class="space-y-5">
       <header class="space-y-2">
-        <div class="flex flex-wrap items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
-          <span class="inline-flex items-center gap-1 font-medium text-amber-600 dark:text-amber-400">
-            <Sparkles class="h-3.5 w-3.5" />
-            Now Page
-          </span>
-          <span>· 更新于 {{ nowFocus.updatedAt }}</span>
+        <div class="flex flex-wrap items-center gap-3 text-xs text-[#86868B]">
+          <span class="font-mono tabular-nums">更新于 {{ nowFocus.updatedAt }}</span>
           <span class="inline-flex items-center gap-1">
             <MapPin class="h-3.5 w-3.5" />
             {{ nowFocus.location }}
           </span>
         </div>
-        <h1 class="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl dark:text-zinc-50">
-          此时此刻 · 最近在做的事
+        <h1 class="text-2xl font-bold tracking-[-0.03em] text-[#1D1D1F] sm:text-3xl dark:text-[#F5F5F7]">
+          最近在做什么
         </h1>
-        <p class="max-w-2xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+        <p class="max-w-2xl text-sm leading-relaxed text-[#6E6E73] dark:text-[#A1A1A6]">
           {{ nowFocus.headline }}
         </p>
       </header>
@@ -48,13 +44,13 @@ const { data: timeline } = await useAsyncData('now-timeline', () =>
         >
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold text-zinc-400">{{ item.label }}</span>
+              <span class="text-xs font-medium text-[#86868B]">{{ item.label }}</span>
               <span class="pill-tag text-[10px]">{{ item.status }}</span>
             </div>
-            <h2 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+            <h2 class="text-[15px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">
               {{ item.title }}
             </h2>
-            <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
+            <p class="text-xs leading-relaxed text-[#6E6E73] dark:text-[#A1A1A6]">
               {{ item.description }}
             </p>
           </div>
@@ -65,26 +61,25 @@ const { data: timeline } = await useAsyncData('now-timeline', () =>
     <!-- Bottom Chronological Timeline -->
     <section class="space-y-5">
       <div class="flex items-center justify-between">
-        <h2 class="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-          近期动态时间线
+        <h2 class="text-lg font-semibold tracking-[-0.02em] text-[#1D1D1F] dark:text-[#F5F5F7]">
+          时间线
         </h2>
-        <span class="text-xs text-zinc-400">
-          共 {{ timeline?.length || 0 }} 条记录
+        <span class="text-xs text-[#86868B]">
+          共 {{ timeline?.length || 0 }} 条
         </span>
       </div>
 
-      <div class="relative space-y-6 border-l-2 border-indigo-200/70 pl-6 dark:border-indigo-500/30">
+      <div class="relative space-y-5 border-l border-black/[0.1] pl-6 dark:border-white/[0.12]">
         <article
           v-for="entry in timeline"
           :key="entry._path"
           class="relative"
         >
-          <!-- Apple Blue Timeline Dot -->
-          <span class="absolute -left-[31px] top-6 h-3 w-3 rounded-full border-2 border-white bg-[#007AFF] shadow-[0_0_0_4px_rgba(0,122,255,0.15)] dark:border-zinc-950" />
+          <span class="absolute -left-[29px] top-6 h-2.5 w-2.5 rounded-full border-2 border-[#F5F5F7] bg-[#0071E3] dark:border-black dark:bg-[#2997FF]" />
 
-          <div class="bento-card space-y-3">
+          <div class="bento-card space-y-2.5">
             <div class="flex flex-wrap items-center justify-between gap-2">
-              <span class="font-mono text-xs text-zinc-400">
+              <span class="font-mono text-xs tabular-nums text-[#86868B]">
                 {{ formatDate(entry.date) }}
               </span>
               <span v-if="entry.tag" class="pill-tag">
@@ -92,7 +87,7 @@ const { data: timeline } = await useAsyncData('now-timeline', () =>
               </span>
             </div>
 
-            <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+            <h3 class="text-base font-semibold text-[#1D1D1F] dark:text-[#F5F5F7]">
               {{ entry.title }}
             </h3>
 

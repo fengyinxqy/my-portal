@@ -11,66 +11,53 @@
   }
 
   body {
-    @apply bg-[#F5F7FF] text-[#1D1D1F] dark:bg-[#070911] dark:text-[#F5F5F7] transition-colors duration-300;
+    @apply bg-[#F5F5F7] text-[#1D1D1F] dark:bg-[#000000] dark:text-[#F5F5F7] transition-colors duration-200;
   }
 }
 
 @layer components {
-  /* Apple HIG Frosted Glass Material */
+  /* Authentic Apple Surface Card: pure elevation + hairline separator */
   .bento-card {
-    @apply rounded-[24px] border border-white/85 bg-white/70 p-6 shadow-glass
-           backdrop-blur-2xl backdrop-saturate-150
-           ring-1 ring-inset ring-white/80
-           transition-all duration-300 ease-apple
-           dark:border-white/10 dark:bg-zinc-900/60 dark:shadow-glass-dark dark:ring-white/10;
+    @apply rounded-[20px] border border-black/[0.06] bg-white p-6 shadow-card
+           transition-all duration-200 ease-apple
+           dark:border-white/[0.09] dark:bg-[#1C1C1E] dark:shadow-none;
   }
 
   .bento-card-interactive {
-    @apply bento-card hover:-translate-y-0.5 hover:bg-white/85 hover:shadow-glass-hover
-           active:scale-[0.99]
-           dark:hover:bg-zinc-900/75 dark:hover:border-white/20;
-  }
-
-  .glass-pill {
-    @apply rounded-full border border-white/85 bg-white/70 shadow-sm
-           backdrop-blur-2xl backdrop-saturate-150
-           ring-1 ring-inset ring-white/75
-           dark:border-white/10 dark:bg-zinc-900/70 dark:ring-white/10;
+    @apply bento-card hover:border-black/[0.12] hover:shadow-card-hover
+           dark:hover:border-white/[0.18] dark:hover:bg-[#242426];
   }
 
   .glass-inner {
-    @apply rounded-2xl border border-white/80 bg-white/60
-           dark:border-white/[0.08] dark:bg-white/[0.04];
+    @apply rounded-xl border border-black/[0.05] bg-[#F5F5F7]/80
+           dark:border-white/[0.07] dark:bg-[#2C2C2E]/70;
   }
 
   .pill-tag {
-    @apply inline-flex items-center rounded-full border border-slate-200/80 bg-white/80 px-2.5 py-0.5
-           text-xs font-medium text-slate-600
-           dark:border-white/10 dark:bg-white/[0.07] dark:text-zinc-300;
+    @apply inline-flex items-center rounded-full bg-black/[0.045] px-2.5 py-0.5
+           text-xs font-medium text-[#515154]
+           dark:bg-white/[0.08] dark:text-[#A1A1A6];
   }
 
   .apple-btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full
-           bg-gradient-to-b from-[#1A88FF] to-[#007AFF] px-5 py-2.5
-           text-sm font-medium text-white shadow-[0_4px_14px_rgba(0,122,255,0.32)]
-           transition-all duration-200 ease-apple
-           hover:brightness-105 hover:shadow-[0_6px_20px_rgba(0,122,255,0.4)]
-           active:scale-[0.97]
-           dark:from-[#2997FF] dark:to-[#0A84FF];
+    @apply inline-flex items-center justify-center gap-1.5 rounded-full
+           bg-[#0071E3] px-5 py-2.5
+           text-sm font-medium text-white
+           transition-colors duration-150
+           hover:bg-[#0077ED] active:bg-[#0068D1]
+           dark:bg-[#2997FF] dark:text-[#000000] dark:hover:bg-[#47A6FF];
   }
 
   .apple-btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full
-           border border-white/90 bg-white/75 px-5 py-2.5
-           text-sm font-medium text-[#1D1D1F] shadow-sm backdrop-blur-xl
-           transition-all duration-200 ease-apple
-           hover:bg-white hover:shadow
-           active:scale-[0.97]
-           dark:border-white/15 dark:bg-white/10 dark:text-[#F5F5F7] dark:hover:bg-white/15;
+    @apply inline-flex items-center justify-center gap-1.5 rounded-full
+           border border-black/[0.12] bg-white px-5 py-2.5
+           text-sm font-medium text-[#1D1D1F]
+           transition-colors duration-150
+           hover:bg-[#F5F5F7]
+           dark:border-white/[0.16] dark:bg-[#2C2C2E] dark:text-[#F5F5F7] dark:hover:bg-[#3A3A3C];
   }
 }
 
-/* Reduced motion accessibility (Apple HIG) */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -78,14 +65,14 @@
   }
 }
 
-/* Blog typography enhancements */
+/* Editorial typography */
 .prose pre {
-  @apply rounded-2xl border border-slate-200/80 dark:border-white/10 !bg-white/80 dark:!bg-zinc-900/90;
+  @apply rounded-xl border border-black/[0.06] dark:border-white/[0.08] !bg-[#F5F5F7] dark:!bg-[#161617];
 }
 
 .prose code:not(pre code) {
-  @apply rounded-md bg-indigo-50/90 px-1.5 py-0.5 text-[0.875em] font-medium text-indigo-700
-         dark:bg-indigo-500/15 dark:text-indigo-300 before:content-none after:content-none;
+  @apply rounded-md bg-black/[0.05] px-1.5 py-0.5 text-[0.875em] font-medium text-[#1D1D1F]
+         dark:bg-white/[0.1] dark:text-[#F5F5F7] before:content-none after:content-none;
 }
 
 /* Dedicated print styles for Resume PDF export */
@@ -107,8 +94,6 @@
   .print-container {
     box-shadow: none !important;
     border: none !important;
-    ring: none !important;
-    backdrop-filter: none !important;
     padding: 0 !important;
     margin: 0 !important;
     max-width: 100% !important;
