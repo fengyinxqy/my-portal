@@ -10,6 +10,7 @@ const props = defineProps({
   class: { type: String, default: '' }
 })
 
+const isMermaid = computed(() => props.language?.trim().toLowerCase() === 'mermaid')
 const copied = ref(false)
 
 async function copyCode() {
@@ -26,7 +27,8 @@ async function copyCode() {
 </script>
 
 <template>
-  <div class="group relative my-5 overflow-hidden rounded-2xl border border-black/[0.08] bg-[#F6F8FA] dark:border-white/[0.1] dark:bg-[#14161D]">
+  <MermaidBlock v-if="isMermaid" :code="code" />
+  <div v-else class="group relative my-5 overflow-hidden rounded-2xl border border-black/[0.08] bg-[#F6F8FA] dark:border-white/[0.1] dark:bg-[#14161D]">
     <div class="flex items-center justify-between border-b border-black/[0.06] bg-white/60 px-4 py-2 text-xs text-[#6E6E73] dark:border-white/[0.08] dark:bg-white/[0.03] dark:text-[#A1A1A6]">
       <span class="font-mono">{{ filename || language || 'text' }}</span>
       <button

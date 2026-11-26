@@ -43,5 +43,6 @@ onUnmounted(() => {
     <AppFooter />
 
     <SearchModal v-model="isSearchOpen" />
+    <ImageLightbox />
   </div>
 </template>

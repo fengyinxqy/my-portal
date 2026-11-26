@@ -2,11 +2,11 @@ import { serverQueryContent } from '#content/server'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
-  const siteUrl = (config.public.siteUrl || 'https://your-domain.com').replace(/\/$/, '')
+  const siteUrl = (config.public.siteUrl || 'https://my-portal-bay.vercel.app').replace(/\/$/, '')
 
   const staticRoutes = ['/', '/resume', '/projects', '/blog', '/now']
   const docs = await serverQueryContent(event, 'blog')
-    .where({ draft: { $ne: true } })
+    .where({ _dir: 'blog', draft: { $ne: true } })
     .find()
 
   const nowIso = new Date().toISOString().split('T')[0]

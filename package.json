@@ -8,13 +8,15 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "sync:obsidian": "node scripts/sync-obsidian.mjs"
+    "sync:obsidian": "node scripts/sync-obsidian.mjs",
+    "release": "node scripts/release.mjs"
   },
   "dependencies": {
     "@nuxt/content": "^2.13.4",
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/tailwindcss": "^6.13.1",
     "lucide-vue-next": "^0.475.0",
+    "mermaid": "^12.3.0",
     "nuxt": "^3.16.2",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"

@@ -11,12 +11,12 @@ function escapeXml(str: string): string {
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
-  const siteUrl = (config.public.siteUrl || 'https://your-domain.com').replace(/\/$/, '')
+  const siteUrl = (config.public.siteUrl || 'https://my-portal-bay.vercel.app').replace(/\/$/, '')
   const siteName = config.public.siteName || '个人门户'
   const siteDescription = config.public.siteDescription || '前端工程师个人门户与技术博客'
 
   const docs = await serverQueryContent(event, 'blog')
-    .where({ draft: { $ne: true } })
+    .where({ _dir: 'blog', draft: { $ne: true } })
     .sort({ date: -1 })
     .find()
 

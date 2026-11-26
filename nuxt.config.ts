@@ -34,7 +34,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://your-domain.com',
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://my-portal-bay.vercel.app',
       siteName: '肖祺彦 · Web 前端工程师',
       siteDescription: '肖祺彦的个人门户：Web 前端工程师简历、性能治理与 AI 工程化项目、技术博客与近期动态。'
     }
