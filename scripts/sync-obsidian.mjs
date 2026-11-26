@@ -4,15 +4,16 @@
  *
  * 使用方式：
  *   1. 在 Obsidian 笔记的 YAML frontmatter 中添加：
- *      publish: true
- *      type: blog   # 可选: blog（默认）或 now
- *      slug: my-post # 可选：自定义 URL slug
+ *      publish: true      # 布尔 true 或文本 "true" 均支持
+ *      type: blog         # 可选: blog（默认）或 now（含 now 即识别为动态）
+ *      slug: my-post      # 可选：自定义 URL slug
  *   2. 运行: pnpm sync:obsidian
  *
  * 环境变量：
  *   OBSIDIAN_VAULT_PATH=d:/UserData/Desktop/个人/知识库
  */
 
+import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
@@ -60,17 +61,63 @@ function walkFiles(dir, result = []) {
   return result
 }
 
-function slugify(name) {
-  return name
+function toSafeAsciiSlug(name, datePrefix = '') {
+  const ascii = String(name || '')
     .trim()
     .toLowerCase()
     .replace(/\s+/g, '-')
-    .replace(/[^\w\u4e00-\u9fa5-]/g, '')
+    .replace(/[^a-z0-9-]/g, '')
     .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+
+  if (ascii.length >= 3) return ascii
+
+  const hash = crypto.createHash('sha1').update(String(name || '')).digest('hex').slice(0, 8)
+  return datePrefix ? `${datePrefix}-${hash}` : `post-${hash}`
 }
 
 function ensureDir(dir) {
   fs.mkdirSync(dir, { recursive: true })
+}
+
+function isPublished(val) {
+  if (val === true) return true
+  if (typeof val === 'string') {
+    const norm = val.trim().toLowerCase()
+    return norm === 'true' || norm === 'yes' || norm === '1'
+  }
+  return false
+}
+
+function resolveDate(data, mdPath) {
+  const raw = data.date || data.created || data.updated
+  if (raw) {
+    const d = new Date(raw)
+    if (!Number.isNaN(d.getTime())) {
+      return d.toISOString().split('T')[0]
+    }
+  }
+  return fs.statSync(mdPath).mtime.toISOString().split('T')[0]
+}
+
+function extractDescription(markdown) {
+  const lines = markdown.split(/\r?\n/)
+  for (const line of lines) {
+    const t = line.trim()
+    if (!t || t.startsWith('#') || t.startsWith('>') || t.startsWith('```') || t.startsWith('---') || t.startsWith('![')) {
+      continue
+    }
+    const clean = t
+      .replace(/^[-*+]\s+/, '')
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/`(.+?)`/g, '$1')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .trim()
+    if (clean.length >= 8) {
+      return clean.length > 100 ? `${clean.slice(0, 100)}…` : clean
+    }
+  }
+  return ''
 }
 
 function sync() {
@@ -112,11 +159,16 @@ function sync() {
     }
 
     const data = parsed.data || {}
-    if (data.publish !== true) continue
+    if (!isPublished(data.publish)) continue
 
-    const type = data.type === 'now' ? 'now' : 'blog'
+    const typeStr = Array.isArray(data.type) ? data.type.join(',') : String(data.type || '')
+    const type = typeStr.toLowerCase().includes('now') ? 'now' : 'blog'
     const baseName = path.basename(mdPath, '.md')
-    const slug = data.slug ? slugify(String(data.slug)) : slugify(baseName)
+    const title = data.title || baseName
+    const dateStr = resolveDate(data, mdPath)
+    const slug = data.slug
+      ? toSafeAsciiSlug(String(data.slug), dateStr)
+      : toSafeAsciiSlug(baseName, dateStr)
     const destDir = type === 'now' ? NOW_DEST : BLOG_DEST
     const destPath = path.join(destDir, `${slug}.md`)
 
@@ -138,20 +190,26 @@ function sync() {
       return (alias || target).trim()
     })
 
+    // Remove duplicate leading H1 if it matches the article title
+    content = content.trimStart()
+    const firstLineMatch = content.match(/^#\s+(.+?)\r?\n+/)
+    if (firstLineMatch && firstLineMatch[1].trim() === String(title).trim()) {
+      content = content.slice(firstLineMatch[0].length)
+    }
+
     const nextFrontmatter = {
-      title: data.title || baseName,
-      description: data.description || '',
-      date: data.date
-        ? new Date(data.date).toISOString().split('T')[0]
-        : fs.statSync(mdPath).mtime.toISOString().split('T')[0],
+      title,
+      description: data.description || extractDescription(content),
+      date: dateStr,
       ...(data.tags ? { tags: Array.isArray(data.tags) ? data.tags : [data.tags] } : {}),
       ...(data.tag ? { tag: data.tag } : {}),
       syncedFromObsidian: true
     }
 
-    const output = matter.stringify(content.trimStart(), nextFrontmatter)
+    const output = matter.stringify(content, nextFrontmatter)
     fs.writeFileSync(destPath, output, 'utf-8')
     syncedTargets.add(destPath)
+    console.log(`📝 已同步 [${type}]: ${title} -> ${path.relative(ROOT_DIR, destPath)}`)
 
     if (type === 'now') nowCount++
     else blogCount++
