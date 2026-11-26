@@ -28,7 +28,7 @@ watch(() => route.path, () => {
 </script>
 
 <template>
-  <header class="no-print sticky top-0 z-40 border-b border-black/[0.06] bg-[#F5F5F7]/80 backdrop-blur-xl backdrop-saturate-150 dark:border-white/[0.08] dark:bg-black/75">
+  <header class="no-print sticky top-0 z-40 border-b border-white/70 bg-white/55 shadow-[0_1px_12px_rgba(15,23,42,0.04)] backdrop-blur-2xl backdrop-saturate-[185%] dark:border-white/[0.1] dark:bg-[#12141C]/65">
     <div class="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6">
       <NuxtLink to="/" class="flex items-center gap-2.5">
         <img

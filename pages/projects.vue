@@ -58,11 +58,11 @@ const filteredProjects = computed(() => {
           v-for="cat in categories"
           :key="cat"
           type="button"
-          class="rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors"
+          class="rounded-full px-3.5 py-1.5 text-xs font-medium transition-all"
           :class="
             activeCategory === cat
-              ? 'bg-[#1D1D1F] text-white dark:bg-[#F5F5F7] dark:text-[#1D1D1F]'
-              : 'border border-black/[0.08] bg-white text-[#515154] hover:border-black/[0.16] hover:text-[#1D1D1F] dark:border-white/[0.1] dark:bg-[#1C1C1E] dark:text-[#A1A1A6] dark:hover:text-white'
+              ? 'bg-[#1D1D1F] text-white shadow-sm dark:bg-[#F5F5F7] dark:text-[#1D1D1F]'
+              : 'glass-pill-btn'
           "
           @click="activeCategory = cat"
         >

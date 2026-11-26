@@ -166,7 +166,7 @@ async function copyWechat() {
           <div
             v-for="group in resumeData.skillGroups"
             :key="group.label"
-            class="rounded-xl border border-zinc-100 bg-zinc-50/70 p-3.5 dark:border-zinc-800/80 dark:bg-zinc-950/50"
+            class="glass-inner p-3.5"
           >
             <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
               {{ group.label }}

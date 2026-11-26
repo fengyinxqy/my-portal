@@ -48,7 +48,7 @@ onMounted(() => {
 
 <template>
   <aside v-if="flatLinks.length > 0" class="hidden lg:block">
-    <div class="sticky top-24 rounded-2xl border border-black/[0.06] bg-white p-4 shadow-card dark:border-white/[0.08] dark:bg-[#1C1C1E]">
+    <div class="bento-card sticky top-24 p-4">
       <p class="mb-3 text-xs font-semibold text-[#86868B]">
         目录
       </p>
