@@ -18,10 +18,10 @@ export interface MusicTrack {
 
 export const musicConfig = {
   /**
-   * 可选：填入你的网易云公开歌单 ID（如 '3778678'）即可自动拉取歌单曲目。
-   * 留空或接口不可用时，会自动回退到下方 tracks 曲库。
+   * 网易云公开歌单 ID：自动拉取歌单曲目、封面与音频。
+   * 留空或接口不可用时，会自动回退到下方内置专注声景曲库。
    */
-  neteasePlaylistId: '',
+  neteasePlaylistId: '474275677',
 
   /** Meting 公共解析接口列表（自动按顺序容错回退） */
   metingApis: [

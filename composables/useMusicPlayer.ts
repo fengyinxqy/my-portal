@@ -210,6 +210,7 @@ let singletonAudio: HTMLAudioElement | null = null
 let singletonAmbient: AmbientEngine | null = null
 let ambientTickTimer: number | null = null
 let neteaseLoaded = false
+let consecutiveErrors = 0
 
 export function useMusicPlayer() {
   const tracks = useState<MusicTrack[]>('music-tracks', () => [...musicConfig.tracks])
@@ -217,6 +218,7 @@ export function useMusicPlayer() {
   const isPlaying = useState<boolean>('music-playing', () => false)
   const isExpanded = useState<boolean>('music-expanded', () => false)
   const isLoading = useState<boolean>('music-loading', () => false)
+  const statusTip = useState<string>('music-status-tip', () => '')
   const currentTime = useState<number>('music-current-time', () => 0)
   const duration = useState<number>('music-duration', () => musicConfig.tracks[0]?.duration || 180)
   const volume = useState<number>('music-volume', () => 0.68)
@@ -228,6 +230,13 @@ export function useMusicPlayer() {
     if (!duration.value || duration.value <= 0) return 0
     return Math.min(100, Math.max(0, (currentTime.value / duration.value) * 100))
   })
+
+  function flashTip(msg: string) {
+    statusTip.value = msg
+    window.setTimeout(() => {
+      if (statusTip.value === msg) statusTip.value = ''
+    }, 2400)
+  }
 
   function ensureEngines() {
     if (!import.meta.client) return
@@ -243,6 +252,10 @@ export function useMusicPlayer() {
         if (!singletonAudio) return
         currentTime.value = singletonAudio.currentTime || 0
       })
+      singletonAudio.addEventListener('playing', () => {
+        consecutiveErrors = 0
+        isLoading.value = false
+      })
       singletonAudio.addEventListener('loadedmetadata', () => {
         if (!singletonAudio) return
         if (Number.isFinite(singletonAudio.duration)) {
@@ -254,7 +267,14 @@ export function useMusicPlayer() {
       })
       singletonAudio.addEventListener('error', () => {
         isLoading.value = false
-        isPlaying.value = false
+        consecutiveErrors++
+        if (isPlaying.value && consecutiveErrors < tracks.value.length) {
+          flashTip('已跳过暂不可播曲目')
+          nextTrack(true)
+        } else {
+          isPlaying.value = false
+          flashTip('音频加载失败')
+        }
       })
     }
   }
@@ -423,6 +443,7 @@ export function useMusicPlayer() {
     isPlaying,
     isExpanded,
     isLoading,
+    statusTip,
     currentTime,
     duration,
     progress,
