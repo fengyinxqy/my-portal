@@ -11,7 +11,7 @@ export default defineNuxtPlugin(() => {
   let lastY = -9999
   let activeCards = new Set<HTMLElement>()
 
-  const PROXIMITY = 110
+  const PROXIMITY = 180
 
   function updateCards() {
     rafId = null

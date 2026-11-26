@@ -30,7 +30,7 @@
     @apply relative overflow-hidden rounded-[22px] p-6 transition-all duration-200 ease-apple;
   }
 
-  /* Specular glass surface sheen following pointer */
+  /* Diffused glass surface sheen following pointer (wide Gaussian-like falloff, no hard circle) */
   .bento-card::before {
     content: '';
     pointer-events: none;
@@ -38,26 +38,29 @@
     inset: 0;
     border-radius: inherit;
     opacity: var(--glass-sheen, 0);
-    transition: opacity 280ms cubic-bezier(0.25, 0.1, 0.25, 1);
+    transition: opacity 360ms cubic-bezier(0.25, 0.1, 0.25, 1);
     background: radial-gradient(
-      340px circle at var(--mx, -999px) var(--my, -999px),
-      rgba(255, 255, 255, 0.55),
-      rgba(147, 197, 253, 0.16) 42%,
-      transparent 72%
+      640px 480px ellipse at var(--mx, -999px) var(--my, -999px),
+      rgba(255, 255, 255, 0.42) 0%,
+      rgba(224, 242, 254, 0.24) 24%,
+      rgba(147, 197, 253, 0.10) 52%,
+      rgba(147, 197, 253, 0.03) 76%,
+      transparent 100%
     );
     z-index: 1;
   }
 
   .dark .bento-card::before {
     background: radial-gradient(
-      340px circle at var(--mx, -999px) var(--my, -999px),
-      rgba(255, 255, 255, 0.11),
-      rgba(56, 189, 248, 0.09) 42%,
-      transparent 72%
+      640px 480px ellipse at var(--mx, -999px) var(--my, -999px),
+      rgba(255, 255, 255, 0.09) 0%,
+      rgba(125, 211, 252, 0.06) 26%,
+      rgba(56, 189, 248, 0.025) 56%,
+      transparent 100%
     );
   }
 
-  /* Specular 1px glass edge refraction glow (also lights up adjacent edges) */
+  /* Soft diffused 1px glass edge refraction glow */
   .bento-card::after {
     content: '';
     pointer-events: none;
@@ -66,12 +69,13 @@
     border-radius: inherit;
     padding: 1.25px;
     opacity: var(--glass-rim, 0);
-    transition: opacity 260ms cubic-bezier(0.25, 0.1, 0.25, 1);
+    transition: opacity 320ms cubic-bezier(0.25, 0.1, 0.25, 1);
     background: radial-gradient(
-      240px circle at var(--mx, -999px) var(--my, -999px),
-      rgba(255, 255, 255, 0.98),
-      rgba(0, 113, 227, 0.34) 45%,
-      transparent 72%
+      420px circle at var(--mx, -999px) var(--my, -999px),
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(0, 113, 227, 0.24) 36%,
+      rgba(0, 113, 227, 0.07) 68%,
+      transparent 100%
     );
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -82,10 +86,11 @@
 
   .dark .bento-card::after {
     background: radial-gradient(
-      240px circle at var(--mx, -999px) var(--my, -999px),
-      rgba(255, 255, 255, 0.55),
-      rgba(41, 151, 255, 0.38) 45%,
-      transparent 72%
+      420px circle at var(--mx, -999px) var(--my, -999px),
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(41, 151, 255, 0.26) 36%,
+      rgba(41, 151, 255, 0.08) 68%,
+      transparent 100%
     );
   }
 
