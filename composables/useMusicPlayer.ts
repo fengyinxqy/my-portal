@@ -2,15 +2,15 @@ import { musicConfig, type AmbientPreset, type MusicTrack } from '~/data/music'
 
 /**
  * Lightweight, click-free Web Audio API focus soundscape synthesizer.
- * Used for built-in ambient tracks when no external MP3 URL is attached.
+ * Generates 6 distinct pure instrumental / ambient moods with zero external dependencies.
  */
 class AmbientEngine {
   private ctx: AudioContext | null = null
   private masterGain: GainNode | null = null
   private activeNodes: AudioNode[] = []
-  private timer: number | null = null
+  private timers: number[] = []
   private currentPreset: AmbientPreset | null = null
-  private volume = 0.65
+  private volume = 0.68
 
   private ensureContext() {
     if (!this.ctx) {
@@ -30,7 +30,7 @@ class AmbientEngine {
     if (this.ctx && this.masterGain && this.currentPreset) {
       const now = this.ctx.currentTime
       this.masterGain.gain.cancelScheduledValues(now)
-      this.masterGain.gain.setTargetAtTime(Math.max(0.0001, this.volume * 0.42), now, 0.06)
+      this.masterGain.gain.setTargetAtTime(Math.max(0.0001, this.volume * 0.44), now, 0.06)
     }
   }
 
@@ -45,27 +45,43 @@ class AmbientEngine {
     const now = this.ctx.currentTime
     this.masterGain.gain.cancelScheduledValues(now)
     this.masterGain.gain.setValueAtTime(0.0001, now)
-    this.masterGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, this.volume * 0.42), now + 0.45)
+    this.masterGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, this.volume * 0.44), now + 0.45)
 
-    if (preset === 'rhodes') {
-      this.startRhodes()
-    } else if (preset === 'rain') {
-      this.startRain()
-    } else {
-      this.startCoastal()
+    switch (preset) {
+      case 'rhodes':
+        this.startRhodes()
+        break
+      case 'piano':
+        this.startPiano()
+        break
+      case 'rain':
+        this.startRain()
+        break
+      case 'coastal':
+        this.startCoastal()
+        break
+      case 'forest':
+        this.startForest()
+        break
+      case 'synth':
+        this.startSynth()
+        break
     }
   }
 
   stop() {
-    if (this.timer !== null) {
-      window.clearInterval(this.timer)
-      this.timer = null
+    for (const t of this.timers) {
+      window.clearInterval(t)
+      window.clearTimeout(t)
     }
+    this.timers = []
+
     if (this.ctx && this.masterGain) {
       const now = this.ctx.currentTime
       this.masterGain.gain.cancelScheduledValues(now)
       this.masterGain.gain.setTargetAtTime(0.0001, now, 0.05)
     }
+
     const nodesToClean = this.activeNodes
     this.activeNodes = []
     this.currentPreset = null
@@ -83,13 +99,12 @@ class AmbientEngine {
     }, 180)
   }
 
-  private createFilteredNoise(cutoffHz: number, gainLevel: number) {
+  private createFilteredNoise(cutoffHz: number, gainLevel: number, q = 0.7) {
     if (!this.ctx || !this.masterGain) return
     const sampleRate = this.ctx.sampleRate
     const bufferSize = sampleRate * 3
     const buffer = this.ctx.createBuffer(2, bufferSize, sampleRate)
 
-    // Smooth pink-ish noise
     for (let ch = 0; ch < 2; ch++) {
       const data = buffer.getChannelData(ch)
       let b0 = 0
@@ -111,6 +126,7 @@ class AmbientEngine {
     const filter = this.ctx.createBiquadFilter()
     filter.type = 'lowpass'
     filter.frequency.value = cutoffHz
+    filter.Q.value = q
 
     const gain = this.ctx.createGain()
     gain.gain.value = gainLevel
@@ -123,17 +139,23 @@ class AmbientEngine {
     this.activeNodes.push(src, filter, gain)
   }
 
-  private playWarmChord(freqs: number[], durationSec: number, gainPeak = 0.12) {
+  private playWarmChord(
+    freqs: number[],
+    durationSec: number,
+    gainPeak = 0.14,
+    staggerSec = 0.035,
+    cutoffStart = 1350
+  ) {
     if (!this.ctx || !this.masterGain) return
     const now = this.ctx.currentTime
     const filter = this.ctx.createBiquadFilter()
     filter.type = 'lowpass'
-    filter.frequency.setValueAtTime(1350, now)
-    filter.frequency.exponentialRampToValueAtTime(520, now + durationSec)
+    filter.frequency.setValueAtTime(cutoffStart, now)
+    filter.frequency.exponentialRampToValueAtTime(480, now + durationSec)
 
     const env = this.ctx.createGain()
     env.gain.setValueAtTime(0.0001, now)
-    env.gain.linearRampToValueAtTime(gainPeak, now + 0.18)
+    env.gain.linearRampToValueAtTime(gainPeak, now + 0.16)
     env.gain.exponentialRampToValueAtTime(0.0001, now + durationSec)
 
     filter.connect(env)
@@ -144,20 +166,46 @@ class AmbientEngine {
       const osc = this.ctx.createOscillator()
       osc.type = idx === 0 ? 'sine' : 'triangle'
       osc.frequency.setValueAtTime(f, now)
-      osc.detune.setValueAtTime((idx - 1.5) * 3.5, now)
+      osc.detune.setValueAtTime((idx - 1.5) * 3.2, now)
 
       const noteGain = this.ctx.createGain()
       noteGain.gain.value = idx === 0 ? 0.45 : 0.24
 
       osc.connect(noteGain)
       noteGain.connect(filter)
-      osc.start(now + idx * 0.035)
+      osc.start(now + idx * staggerSec)
       osc.stop(now + durationSec + 0.1)
     })
   }
 
+  private playPluckNote(freq: number, startOffsetSec: number, durationSec: number, peak = 0.11, wave: OscillatorType = 'triangle') {
+    if (!this.ctx || !this.masterGain) return
+    const start = this.ctx.currentTime + startOffsetSec
+
+    const osc = this.ctx.createOscillator()
+    osc.type = wave
+    osc.frequency.setValueAtTime(freq, start)
+
+    const filter = this.ctx.createBiquadFilter()
+    filter.type = 'lowpass'
+    filter.frequency.setValueAtTime(freq * 3.2, start)
+    filter.frequency.exponentialRampToValueAtTime(Math.max(240, freq * 1.1), start + durationSec)
+
+    const env = this.ctx.createGain()
+    env.gain.setValueAtTime(0.0001, start)
+    env.gain.linearRampToValueAtTime(peak, start + 0.025)
+    env.gain.exponentialRampToValueAtTime(0.0001, start + durationSec)
+
+    osc.connect(filter)
+    filter.connect(env)
+    env.connect(this.masterGain)
+
+    osc.start(start)
+    osc.stop(start + durationSec + 0.06)
+  }
+
   private startRhodes() {
-    // Subtle vinyl warmth + lush Lo-Fi jazz chords: Fmaj7 -> Em7 -> Dm7 -> Cmaj7
+    // Lo-Fi jazz chords with subtle vinyl warmth
     this.createFilteredNoise(900, 0.12)
     const chords = [
       [174.61, 220.0, 261.63, 329.63], // Fmaj7
@@ -171,11 +219,31 @@ class AmbientEngine {
       step++
     }
     tick()
-    this.timer = window.setInterval(tick, 3400)
+    this.timers.push(window.setInterval(tick, 3400))
+  }
+
+  private startPiano() {
+    // Intimate felt-piano arpeggios: Cmaj9 -> G6 -> Am9 -> Fmaj7
+    const arpeggios = [
+      [130.81, 196.0, 246.94, 293.66, 329.63],
+      [98.0, 196.0, 246.94, 293.66, 329.63],
+      [110.0, 164.81, 246.94, 261.63, 329.63],
+      [87.31, 174.61, 220.0, 261.63, 329.63]
+    ]
+    let bar = 0
+    const tick = () => {
+      const notes = arpeggios[bar % arpeggios.length]
+      notes.forEach((freq, idx) => {
+        this.playPluckNote(freq, idx * 0.42, 2.3, idx === 0 ? 0.14 : 0.09, 'triangle')
+      })
+      bar++
+    }
+    tick()
+    this.timers.push(window.setInterval(tick, 3200))
   }
 
   private startRain() {
-    // Soft rainfall + delicate pentatonic drops
+    // Soft rainfall + delicate pentatonic droplets
     this.createFilteredNoise(720, 0.65)
     const notes = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25]
     const tick = () => {
@@ -184,7 +252,7 @@ class AmbientEngine {
       this.playWarmChord([n1, n2], 2.8, 0.085)
     }
     tick()
-    this.timer = window.setInterval(tick, 2900)
+    this.timers.push(window.setInterval(tick, 2900))
   }
 
   private startCoastal() {
@@ -202,16 +270,48 @@ class AmbientEngine {
       step++
     }
     tick()
-    this.timer = window.setInterval(tick, 4400)
+    this.timers.push(window.setInterval(tick, 4400))
+  }
+
+  private startForest() {
+    // Gentle stream ambience + wooden marimba/kalimba pentatonic chimes
+    this.createFilteredNoise(1150, 0.24, 1.4)
+    const scale = [293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25]
+    const tick = () => {
+      const count = 2 + Math.floor(Math.random() * 2)
+      for (let i = 0; i < count; i++) {
+        const freq = scale[Math.floor(Math.random() * scale.length)]
+        this.playPluckNote(freq, i * 0.36, 1.35, 0.09, 'sine')
+      }
+    }
+    tick()
+    this.timers.push(window.setInterval(tick, 2200))
+  }
+
+  private startSynth() {
+    // Slow breathing space pad + shimmering high harmonic notes
+    const pads = [
+      [110.0, 164.81, 220.0, 329.63],  // Am(add5)
+      [87.31, 130.81, 220.0, 261.63],  // Fmaj7
+      [98.0, 146.83, 196.0, 293.66],   // Gsus2
+      [130.81, 196.0, 246.94, 392.0]   // Cmaj7
+    ]
+    const chimes = [523.25, 659.25, 783.99, 987.77]
+    let step = 0
+    const tick = () => {
+      this.playWarmChord(pads[step % pads.length], 5.2, 0.13, 0.08, 920)
+      const shimmer = chimes[step % chimes.length]
+      this.playPluckNote(shimmer, 1.4, 2.8, 0.045, 'sine')
+      step++
+    }
+    tick()
+    this.timers.push(window.setInterval(tick, 4800))
   }
 }
 
 let singletonAudio: HTMLAudioElement | null = null
 let singletonAmbient: AmbientEngine | null = null
 let ambientTickTimer: number | null = null
-let neteaseLoaded = false
-let consecutiveErrors = 0
-let currentFallbackIdx = 0
 
 export function useMusicPlayer() {
   const tracks = useState<MusicTrack[]>('music-tracks', () => [...musicConfig.tracks])
@@ -232,13 +332,6 @@ export function useMusicPlayer() {
     return Math.min(100, Math.max(0, (currentTime.value / duration.value) * 100))
   })
 
-  function flashTip(msg: string) {
-    statusTip.value = msg
-    window.setTimeout(() => {
-      if (statusTip.value === msg) statusTip.value = ''
-    }, 2400)
-  }
-
   function ensureEngines() {
     if (!import.meta.client) return
     if (!singletonAmbient) {
@@ -253,10 +346,6 @@ export function useMusicPlayer() {
         if (!singletonAudio) return
         currentTime.value = singletonAudio.currentTime || 0
       })
-      singletonAudio.addEventListener('playing', () => {
-        consecutiveErrors = 0
-        isLoading.value = false
-      })
       singletonAudio.addEventListener('loadedmetadata', () => {
         if (!singletonAudio) return
         if (Number.isFinite(singletonAudio.duration)) {
@@ -267,25 +356,12 @@ export function useMusicPlayer() {
         nextTrack(true)
       })
       singletonAudio.addEventListener('error', () => {
-        const track = currentTrack.value
-        const fallbacks = track?.fallbackUrls || []
-        if (singletonAudio && currentFallbackIdx < fallbacks.length) {
-          const nextUrl = fallbacks[currentFallbackIdx++]
-          singletonAudio.src = nextUrl
-          singletonAudio.load()
-          singletonAudio.play().catch(() => {})
-          return
-        }
-
         isLoading.value = false
-        consecutiveErrors++
-        if (isPlaying.value && consecutiveErrors < tracks.value.length) {
-          flashTip('已跳过暂不可播曲目')
-          nextTrack(true)
-        } else {
-          isPlaying.value = false
-          flashTip('音频加载失败，请切换曲目')
-        }
+        isPlaying.value = false
+        statusTip.value = '音频加载失败'
+        window.setTimeout(() => {
+          if (statusTip.value === '音频加载失败') statusTip.value = ''
+        }, 2000)
       })
     }
   }
@@ -310,56 +386,6 @@ export function useMusicPlayer() {
     }, 500)
   }
 
-  async function loadNeteasePlaylistIfConfigured() {
-    if (!import.meta.client || neteaseLoaded) return
-    const playlistId = musicConfig.neteasePlaylistId?.trim()
-    if (!playlistId) return
-    neteaseLoaded = true
-
-    for (const template of musicConfig.metingApis) {
-      try {
-        const url = template.replace('{id}', encodeURIComponent(playlistId))
-        const res = await fetch(url)
-        if (!res.ok) continue
-        const list = await res.json()
-        if (!Array.isArray(list) || list.length === 0) continue
-
-        const mapped: MusicTrack[] = list
-          .filter((item: any) => item?.url)
-          .slice(0, 30)
-          .map((item: any, idx: number) => {
-            const primaryUrl = String(item.url)
-            const idMatch = primaryUrl.match(/[?&]id=(\d+)/)
-            const songId = idMatch?.[1]
-            const fallbackUrls: string[] = []
-            if (songId) {
-              const injahowUrl = `https://api.injahow.cn/meting/?server=netease&type=url&id=${songId}`
-              const outerUrl = `https://music.163.com/song/media/outer/url?id=${songId}.mp3`
-              if (primaryUrl !== injahowUrl) fallbackUrls.push(injahowUrl)
-              fallbackUrls.push(outerUrl)
-            }
-            return {
-              id: `netease-${idx}-${songId || item.title || item.name || 'track'}`,
-              title: String(item.title || item.name || '未知曲目'),
-              artist: String(item.author || item.artist || '未知歌手'),
-              url: primaryUrl,
-              fallbackUrls,
-              cover: item.pic || item.cover || undefined
-            }
-          })
-
-        if (mapped.length > 0) {
-          tracks.value = mapped
-          currentIndex.value = 0
-          currentTime.value = 0
-          return
-        }
-      } catch {
-        // try next endpoint
-      }
-    }
-  }
-
   async function playCurrent() {
     if (!import.meta.client) return
     ensureEngines()
@@ -367,7 +393,6 @@ export function useMusicPlayer() {
     if (!track) return
 
     if (track.url) {
-      // External / local audio file
       singletonAmbient?.stop()
       clearAmbientClock()
       if (!singletonAudio) return
@@ -375,7 +400,6 @@ export function useMusicPlayer() {
       isLoading.value = true
       const resolvedHref = new URL(track.url, window.location.origin).href
       if (singletonAudio.error || singletonAudio.src !== resolvedHref) {
-        currentFallbackIdx = 0
         singletonAudio.src = track.url
         singletonAudio.load()
       }
@@ -383,17 +407,12 @@ export function useMusicPlayer() {
       try {
         await singletonAudio.play()
         isPlaying.value = true
-        consecutiveErrors = 0
-      } catch (err: any) {
-        // Ignore AbortError when fallback URL starts loading
-        if (err?.name !== 'AbortError') {
-          isPlaying.value = false
-        }
+      } catch {
+        isPlaying.value = false
       } finally {
         isLoading.value = false
       }
     } else if (track.ambientPreset) {
-      // Built-in Web Audio ambient focus soundscape
       if (singletonAudio) {
         singletonAudio.pause()
       }
@@ -480,7 +499,6 @@ export function useMusicPlayer() {
     progress,
     volume,
     isMuted,
-    loadNeteasePlaylistIfConfigured,
     togglePlay,
     selectTrack,
     nextTrack,

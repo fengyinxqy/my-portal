@@ -25,7 +25,6 @@ const {
   progress,
   volume,
   isMuted,
-  loadNeteasePlaylistIfConfigured,
   togglePlay,
   selectTrack,
   nextTrack,
@@ -221,8 +220,6 @@ const coverStyle = computed(() => {
 })
 
 onMounted(() => {
-  loadNeteasePlaylistIfConfigured()
-
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) {
