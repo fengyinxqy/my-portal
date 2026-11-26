@@ -7,40 +7,85 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
-    @apply bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 transition-colors duration-200;
+    @apply bg-[#F5F7FF] text-[#1D1D1F] dark:bg-[#070911] dark:text-[#F5F5F7] transition-colors duration-300;
   }
 }
 
 @layer components {
+  /* Apple HIG Frosted Glass Material */
   .bento-card {
-    @apply rounded-2xl border border-zinc-200/80 bg-white/90 p-6 shadow-bento backdrop-blur-sm
-           transition-all duration-200
-           dark:border-zinc-800/80 dark:bg-zinc-900/75;
+    @apply rounded-[24px] border border-white/85 bg-white/70 p-6 shadow-glass
+           backdrop-blur-2xl backdrop-saturate-150
+           ring-1 ring-inset ring-white/80
+           transition-all duration-300 ease-apple
+           dark:border-white/10 dark:bg-zinc-900/60 dark:shadow-glass-dark dark:ring-white/10;
   }
 
   .bento-card-interactive {
-    @apply bento-card hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-bento-hover
-           dark:hover:border-zinc-700;
+    @apply bento-card hover:-translate-y-0.5 hover:bg-white/85 hover:shadow-glass-hover
+           active:scale-[0.99]
+           dark:hover:bg-zinc-900/75 dark:hover:border-white/20;
+  }
+
+  .glass-pill {
+    @apply rounded-full border border-white/85 bg-white/70 shadow-sm
+           backdrop-blur-2xl backdrop-saturate-150
+           ring-1 ring-inset ring-white/75
+           dark:border-white/10 dark:bg-zinc-900/70 dark:ring-white/10;
+  }
+
+  .glass-inner {
+    @apply rounded-2xl border border-white/80 bg-white/60
+           dark:border-white/[0.08] dark:bg-white/[0.04];
   }
 
   .pill-tag {
-    @apply inline-flex items-center rounded-full border border-zinc-200 bg-zinc-100/80 px-2.5 py-0.5
-           text-xs font-medium text-zinc-700
-           dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-zinc-300;
+    @apply inline-flex items-center rounded-full border border-slate-200/80 bg-white/80 px-2.5 py-0.5
+           text-xs font-medium text-slate-600
+           dark:border-white/10 dark:bg-white/[0.07] dark:text-zinc-300;
+  }
+
+  .apple-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full
+           bg-gradient-to-b from-[#1A88FF] to-[#007AFF] px-5 py-2.5
+           text-sm font-medium text-white shadow-[0_4px_14px_rgba(0,122,255,0.32)]
+           transition-all duration-200 ease-apple
+           hover:brightness-105 hover:shadow-[0_6px_20px_rgba(0,122,255,0.4)]
+           active:scale-[0.97]
+           dark:from-[#2997FF] dark:to-[#0A84FF];
+  }
+
+  .apple-btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full
+           border border-white/90 bg-white/75 px-5 py-2.5
+           text-sm font-medium text-[#1D1D1F] shadow-sm backdrop-blur-xl
+           transition-all duration-200 ease-apple
+           hover:bg-white hover:shadow
+           active:scale-[0.97]
+           dark:border-white/15 dark:bg-white/10 dark:text-[#F5F5F7] dark:hover:bg-white/15;
+  }
+}
+
+/* Reduced motion accessibility (Apple HIG) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
 /* Blog typography enhancements */
 .prose pre {
-  @apply rounded-xl border border-zinc-200/80 dark:border-zinc-800 !bg-zinc-50 dark:!bg-zinc-900/90;
+  @apply rounded-2xl border border-slate-200/80 dark:border-white/10 !bg-white/80 dark:!bg-zinc-900/90;
 }
 
 .prose code:not(pre code) {
-  @apply rounded-md bg-zinc-100 px-1.5 py-0.5 text-[0.875em] font-medium text-zinc-800
-         dark:bg-zinc-800 dark:text-zinc-200 before:content-none after:content-none;
+  @apply rounded-md bg-indigo-50/90 px-1.5 py-0.5 text-[0.875em] font-medium text-indigo-700
+         dark:bg-indigo-500/15 dark:text-indigo-300 before:content-none after:content-none;
 }
 
 /* Dedicated print styles for Resume PDF export */
@@ -62,6 +107,8 @@
   .print-container {
     box-shadow: none !important;
     border: none !important;
+    ring: none !important;
+    backdrop-filter: none !important;
     padding: 0 !important;
     margin: 0 !important;
     max-width: 100% !important;

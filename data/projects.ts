@@ -1,3 +1,16 @@
+export type ProjectIconKey =
+  | 'smartphone'
+  | 'package'
+  | 'timer'
+  | 'network'
+  | 'sparkles'
+  | 'gauge'
+  | 'activity'
+  | 'bot'
+  | 'bar-chart'
+
+export type ProjectTint = 'emerald' | 'amber' | 'rose' | 'indigo' | 'sky' | 'violet'
+
 export interface PortfolioProject {
   slug: string
   title: string
@@ -6,10 +19,39 @@ export interface PortfolioProject {
   year: string
   role: string
   featured: boolean
+  iconKey: ProjectIconKey
+  tint: ProjectTint
   tech: string[]
   highlights: string[]
   demoUrl?: string
   repoUrl?: string
+}
+
+export const projectTintStyles: Record<ProjectTint, { badge: string; text: string }> = {
+  emerald: {
+    badge: 'bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-[0_6px_16px_rgba(16,185,129,0.28)]',
+    text: 'text-emerald-600 dark:text-emerald-400'
+  },
+  amber: {
+    badge: 'bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-[0_6px_16px_rgba(245,158,11,0.28)]',
+    text: 'text-amber-600 dark:text-amber-400'
+  },
+  rose: {
+    badge: 'bg-gradient-to-br from-rose-400 to-pink-600 text-white shadow-[0_6px_16px_rgba(244,63,94,0.28)]',
+    text: 'text-rose-600 dark:text-rose-400'
+  },
+  indigo: {
+    badge: 'bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-[0_6px_16px_rgba(99,102,241,0.28)]',
+    text: 'text-indigo-600 dark:text-indigo-400'
+  },
+  sky: {
+    badge: 'bg-gradient-to-br from-sky-400 to-blue-600 text-white shadow-[0_6px_16px_rgba(14,165,233,0.28)]',
+    text: 'text-sky-600 dark:text-sky-400'
+  },
+  violet: {
+    badge: 'bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-[0_6px_16px_rgba(139,92,246,0.28)]',
+    text: 'text-violet-600 dark:text-violet-400'
+  }
 }
 
 export const portfolioProjects: PortfolioProject[] = [
@@ -22,6 +64,8 @@ export const portfolioProjects: PortfolioProject[] = [
     year: '2026',
     role: '作者 · 独立开发',
     featured: true,
+    iconKey: 'smartphone',
+    tint: 'emerald',
     tech: ['HyperOS 背屏', 'Android', 'Shizuku', 'AI Agents', 'Java / Python'],
     highlights: [
       '免 Root 方案，把复杂的终端状态压缩成「开发中 / 空闲 / 未连接」与一行核心读数，减少切窗打断注意力',
@@ -39,6 +83,8 @@ export const portfolioProjects: PortfolioProject[] = [
     year: '2026',
     role: '作者 · 独立开发',
     featured: true,
+    iconKey: 'package',
+    tint: 'amber',
     tech: ['uni-app', 'Vue 3', 'Vite', '微信小程序'],
     highlights: [
       '覆盖搬家创建、箱子编号管理、物品连续录入、模糊搜索、箱号反查与物品移箱完整闭环',
@@ -56,6 +102,8 @@ export const portfolioProjects: PortfolioProject[] = [
     year: '2026',
     role: '作者 · 独立开发',
     featured: true,
+    iconKey: 'timer',
+    tint: 'rose',
     tech: ['Tauri 2', 'TypeScript', 'Rust', 'SQLite'],
     highlights: [
       '一键启动/切换项目计时，自动结束上一段记录，并通过每日时间轴清晰回顾时间分配',
@@ -73,6 +121,8 @@ export const portfolioProjects: PortfolioProject[] = [
     year: '2026',
     role: '作者 · 独立开发',
     featured: true,
+    iconKey: 'network',
+    tint: 'indigo',
     tech: ['TypeScript', 'AI 应用', '可视化树图', '亲属关系引擎'],
     highlights: [
       '提供树状图、世系表、分支图与时间轴多视图，支持代际筛选、节点聚焦与右侧助手联动',
@@ -91,6 +141,8 @@ export const portfolioProjects: PortfolioProject[] = [
     year: '2025 - 2026',
     role: '主导者',
     featured: false,
+    iconKey: 'sparkles',
+    tint: 'violet',
     tech: ['SDD 流程', 'AI Review', 'Figma 出码', '多智能体协作', 'CodeGraph MCP'],
     highlights: [
       '建立基于 SDD 的 AI 辅助研发流程，从 3 人试点沉淀可执行范例并推广至业务线',
@@ -107,6 +159,8 @@ export const portfolioProjects: PortfolioProject[] = [
     year: '2023 - 2026',
     role: '前端负责人',
     featured: false,
+    iconKey: 'gauge',
+    tint: 'sky',
     tech: ['Vue', 'TypeScript', '动态高度虚拟列表', '横向虚拟滚动', '全键盘交互'],
     highlights: [
       '超宽表格表头单实例复用 + 横向虚拟滚动：1000 行 × 1000+ 列渲染耗时从 47s 降至约 600ms',
@@ -123,6 +177,8 @@ export const portfolioProjects: PortfolioProject[] = [
     year: '2023 - 2026',
     role: '前端负责人',
     featured: false,
+    iconKey: 'activity',
+    tint: 'emerald',
     tech: ['埋点 SDK', 'Web Vitals', 'heatmap.js', 'Puppeteer', '隐私合规'],
     highlights: [
       '自研埋点 SDK 支持按配置停发与 Cookie 清理，满足业务线隐私合规要求',
@@ -139,6 +195,8 @@ export const portfolioProjects: PortfolioProject[] = [
     year: '2024 - 2026',
     role: '前端负责人',
     featured: false,
+    iconKey: 'bot',
+    tint: 'indigo',
     tech: ['Vue', '国际化 i18n', 'PC/移动端适配', 'AI Agent'],
     highlights: [
       '将 jQuery 多页项目重构为 Vue 单页应用，统一多端工程与多语言能力',
@@ -155,6 +213,8 @@ export const portfolioProjects: PortfolioProject[] = [
     year: '2024 - 2025',
     role: '核心优化者',
     featured: false,
+    iconKey: 'bar-chart',
+    tint: 'amber',
     tech: ['ECharts', '防抖与懒加载', '浏览器渲染优化'],
     highlights: [
       '修复循环调用 setOption 与未防抖重复渲染，ECharts 图项搜索耗时由 14s 降至约 300ms',

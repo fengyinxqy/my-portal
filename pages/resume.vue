@@ -59,7 +59,7 @@ async function copyWechat() {
       <div class="flex flex-wrap items-center gap-2">
         <button
           type="button"
-          class="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
+          class="apple-btn-secondary px-4 py-2 text-xs"
           @click="copyEmail"
         >
           <Check v-if="copiedEmail" class="h-3.5 w-3.5 text-emerald-500" />
@@ -69,7 +69,7 @@ async function copyWechat() {
 
         <button
           type="button"
-          class="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
+          class="apple-btn-secondary px-4 py-2 text-xs"
           @click="showWechat = !showWechat"
         >
           <MessageSquare class="h-3.5 w-3.5" />
@@ -78,7 +78,7 @@ async function copyWechat() {
 
         <button
           type="button"
-          class="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          class="apple-btn-primary px-4 py-2 text-xs"
           @click="printPdf"
         >
           <Printer class="h-3.5 w-3.5" />

@@ -16,17 +16,20 @@ export default <Partial<Config>>{
     extend: {
       fontFamily: {
         sans: [
-          'Inter',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"SF Pro Display"',
+          '"SF Pro Text"',
           '"PingFang SC"',
           '"Hiragino Sans GB"',
           '"Microsoft YaHei"',
+          'Inter',
           'system-ui',
-          '-apple-system',
           'sans-serif'
         ],
         mono: [
+          '"SF Mono"',
           '"JetBrains Mono"',
-          '"Fira Code"',
           'ui-monospace',
           'SFMono-Regular',
           'Menlo',
@@ -34,18 +37,22 @@ export default <Partial<Config>>{
         ]
       },
       colors: {
-        surface: {
-          50: '#fafafa',
-          100: '#f4f4f5',
-          200: '#e4e4e7',
-          800: '#18181b',
-          900: '#111113',
-          950: '#09090b'
+        apple: {
+          blue: '#007AFF',
+          'blue-dark': '#0A84FF',
+          indigo: '#5856D6',
+          cyan: '#32ADE6',
+          mint: '#00C7BE',
+          pink: '#FF2D55'
         }
       },
       boxShadow: {
-        bento: '0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03)',
-        'bento-hover': '0 4px 12px rgba(0, 0, 0, 0.06), 0 12px 28px rgba(0, 0, 0, 0.06)'
+        glass: '0 2px 10px rgba(15, 23, 42, 0.03), 0 12px 32px rgba(88, 86, 214, 0.06)',
+        'glass-hover': '0 6px 18px rgba(15, 23, 42, 0.05), 0 18px 40px rgba(0, 122, 255, 0.11)',
+        'glass-dark': '0 4px 20px rgba(0, 0, 0, 0.35), 0 16px 40px rgba(0, 0, 0, 0.45)'
+      },
+      transitionTimingFunction: {
+        apple: 'cubic-bezier(0.22, 1, 0.36, 1)'
       }
     }
   },

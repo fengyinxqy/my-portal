@@ -73,14 +73,14 @@ const { data: timeline } = await useAsyncData('now-timeline', () =>
         </span>
       </div>
 
-      <div class="relative space-y-6 border-l border-zinc-200 pl-6 dark:border-zinc-800">
+      <div class="relative space-y-6 border-l-2 border-indigo-200/70 pl-6 dark:border-indigo-500/30">
         <article
           v-for="entry in timeline"
           :key="entry._path"
           class="relative"
         >
-          <!-- Timeline Dot -->
-          <span class="absolute -left-[29px] top-6 h-2.5 w-2.5 rounded-full border-2 border-zinc-50 bg-zinc-900 dark:border-zinc-950 dark:bg-zinc-100" />
+          <!-- Apple Blue Timeline Dot -->
+          <span class="absolute -left-[31px] top-6 h-3 w-3 rounded-full border-2 border-white bg-[#007AFF] shadow-[0_0_0_4px_rgba(0,122,255,0.15)] dark:border-zinc-950" />
 
           <div class="bento-card space-y-3">
             <div class="flex flex-wrap items-center justify-between gap-2">

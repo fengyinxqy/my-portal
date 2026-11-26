@@ -6,24 +6,24 @@ const year = new Date().getFullYear()
 </script>
 
 <template>
-  <footer class="no-print border-t border-zinc-200/70 dark:border-zinc-800/70">
-    <div class="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between sm:px-6 dark:text-zinc-400">
+  <footer class="no-print mx-auto w-full max-w-5xl px-4 pb-8 sm:px-6">
+    <div class="flex flex-col gap-4 border-t border-slate-200/70 pt-6 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between dark:border-white/10 dark:text-zinc-400">
       <p>
-        © {{ year }} {{ profile.name }} · 使用 Nuxt 3 与 Tailwind CSS 构建
+        © {{ year }} {{ profile.name }} · Crafted with Nuxt 3 & Tailwind CSS
       </p>
       <div class="flex items-center gap-4">
         <a
           :href="profile.github"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 transition hover:text-zinc-900 dark:hover:text-zinc-100"
+          class="inline-flex items-center gap-1.5 transition hover:text-[#007AFF]"
         >
           <Github class="h-3.5 w-3.5" />
           GitHub
         </a>
         <a
           :href="`mailto:${profile.email}`"
-          class="inline-flex items-center gap-1.5 transition hover:text-zinc-900 dark:hover:text-zinc-100"
+          class="inline-flex items-center gap-1.5 transition hover:text-[#007AFF]"
         >
           <Mail class="h-3.5 w-3.5" />
           Email
@@ -31,7 +31,7 @@ const year = new Date().getFullYear()
         <a
           href="/rss.xml"
           target="_blank"
-          class="inline-flex items-center gap-1.5 transition hover:text-zinc-900 dark:hover:text-zinc-100"
+          class="inline-flex items-center gap-1.5 transition hover:text-[#007AFF]"
         >
           <Rss class="h-3.5 w-3.5" />
           RSS

@@ -48,8 +48,8 @@ onMounted(() => {
 
 <template>
   <aside v-if="flatLinks.length > 0" class="hidden lg:block">
-    <div class="sticky top-24 rounded-2xl border border-zinc-200/70 bg-white/70 p-4 dark:border-zinc-800/70 dark:bg-zinc-900/50">
-      <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">
+    <div class="sticky top-24 rounded-[20px] border border-white/80 bg-white/70 p-4 shadow-glass backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-900/60">
+      <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
         目录大纲
       </p>
       <ul class="space-y-1.5 text-xs">
@@ -60,11 +60,11 @@ onMounted(() => {
         >
           <a
             :href="`#${item.id}`"
-            class="block truncate py-0.5 transition"
+            class="block truncate rounded-lg px-2 py-1 transition"
             :class="
               activeId === item.id
-                ? 'font-semibold text-zinc-900 dark:text-zinc-100'
-                : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200'
+                ? 'bg-[#007AFF]/10 font-semibold text-[#007AFF] dark:bg-[#0A84FF]/20 dark:text-[#64B5FF]'
+                : 'text-slate-500 hover:text-[#1D1D1F] dark:text-zinc-400 dark:hover:text-zinc-200'
             "
           >
             {{ item.text }}

@@ -12,7 +12,7 @@ function toggleTheme() {
   <ClientOnly>
     <button
       type="button"
-      class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200/80 bg-white/80 text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900/80 dark:text-zinc-400 dark:hover:border-zinc-700 dark:hover:text-zinc-100"
+      class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/70 text-slate-600 transition-all duration-200 hover:bg-white hover:text-[#1D1D1F] active:scale-95 dark:border-white/10 dark:bg-white/10 dark:text-zinc-300 dark:hover:bg-white/15 dark:hover:text-white"
       :aria-label="colorMode.value === 'dark' ? '切换到浅色模式' : '切换到深色模式'"
       :title="colorMode.value === 'dark' ? '切换到浅色模式' : '切换到深色模式'"
       @click="toggleTheme"
@@ -21,7 +21,7 @@ function toggleTheme() {
       <Moon v-else class="h-4 w-4" />
     </button>
     <template #fallback>
-      <span class="inline-flex h-9 w-9 rounded-xl border border-zinc-200/80 dark:border-zinc-800" />
+      <span class="inline-flex h-8 w-8 rounded-full border border-white/60 dark:border-white/10" />
     </template>
   </ClientOnly>
 </template>
