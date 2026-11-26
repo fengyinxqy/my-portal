@@ -137,31 +137,33 @@ const { data: latestUpdates } = await useAsyncData('home-latest-now', () =>
       </div>
 
       <!-- Spec Card: Engineering Results (4 cols) -->
-      <div class="bento-card md:col-span-4 flex flex-col justify-between gap-4">
-        <div class="flex items-center justify-between">
-          <h2 class="text-xs font-semibold text-[#86868B]">
-            代表成果
-          </h2>
-          <span class="text-xs text-[#6E6E73] dark:text-[#86868B]">MDN 贡献者</span>
-        </div>
-
-        <div class="divide-y divide-black/[0.06] dark:divide-white/[0.08]">
-          <div class="pb-3.5">
-            <div class="font-mono text-xl font-semibold tracking-tight tabular-nums text-[#1D1D1F] dark:text-[#F5F5F7]">
-              47s <span class="text-[#86868B] font-normal">→</span> 600ms
-            </div>
-            <p class="mt-0.5 text-xs text-[#6E6E73] dark:text-[#A1A1A6]">
-              超宽表格单实例复用与横向虚拟滚动
-            </p>
+      <div class="bento-card md:col-span-4 flex flex-col justify-between gap-5">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xs font-semibold text-[#86868B]">
+              代表成果
+            </h2>
+            <span class="text-xs text-[#6E6E73] dark:text-[#86868B]">MDN 贡献者</span>
           </div>
 
-          <div class="pt-3.5">
-            <div class="font-mono text-xl font-semibold tracking-tight tabular-nums text-[#1D1D1F] dark:text-[#F5F5F7]">
-              14s <span class="text-[#86868B] font-normal">→</span> 300ms
+          <div class="divide-y divide-black/[0.06] dark:divide-white/[0.08]">
+            <div class="pb-3.5">
+              <div class="font-mono text-xl font-semibold tracking-tight tabular-nums text-[#1D1D1F] dark:text-[#F5F5F7]">
+                47s <span class="text-[#86868B] font-normal">→</span> 600ms
+              </div>
+              <p class="mt-0.5 text-xs text-[#6E6E73] dark:text-[#A1A1A6]">
+                超宽表格单实例复用与横向虚拟滚动
+              </p>
             </div>
-            <p class="mt-0.5 text-xs text-[#6E6E73] dark:text-[#A1A1A6]">
-              数据门户 ECharts 渲染链路治理
-            </p>
+
+            <div class="pt-3.5">
+              <div class="font-mono text-xl font-semibold tracking-tight tabular-nums text-[#1D1D1F] dark:text-[#F5F5F7]">
+                14s <span class="text-[#86868B] font-normal">→</span> 300ms
+              </div>
+              <p class="mt-0.5 text-xs text-[#6E6E73] dark:text-[#A1A1A6]">
+                数据门户 ECharts 渲染链路治理
+              </p>
+            </div>
           </div>
         </div>
 
@@ -197,66 +199,78 @@ const { data: latestUpdates } = await useAsyncData('home-latest-now', () =>
 
       <!-- Tech Stack Card (4 cols) -->
       <div class="bento-card md:col-span-4 flex flex-col justify-between gap-4">
-        <div class="flex items-center justify-between">
-          <h2 class="text-xs font-semibold text-[#86868B]">
-            常用技术栈
-          </h2>
-          <NuxtLink to="/resume" class="text-xs font-medium text-[#0071E3] hover:underline dark:text-[#2997FF]">
-            详情 →
-          </NuxtLink>
+        <div class="space-y-3.5">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xs font-semibold text-[#86868B]">
+              常用技术栈
+            </h2>
+            <NuxtLink to="/resume" class="text-xs font-medium text-[#0071E3] hover:underline dark:text-[#2997FF]">
+              详情 →
+            </NuxtLink>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <span v-for="skill in profile.coreSkills" :key="skill" class="pill-tag px-2.5 py-1">
+              {{ skill }}
+            </span>
+          </div>
         </div>
-        <div class="flex flex-wrap gap-1.5">
-          <span v-for="skill in profile.coreSkills" :key="skill" class="pill-tag px-2.5 py-1">
-            {{ skill }}
-          </span>
-        </div>
+
+        <p class="text-xs text-[#86868B]">
+          主力 Vue 生态 · 偏工程与性能治理
+        </p>
       </div>
 
       <!-- Contact Card (4 cols) -->
       <div class="bento-card md:col-span-4 flex flex-col justify-between gap-4">
-        <h2 class="text-xs font-semibold text-[#86868B]">
-          联系方式
-        </h2>
-        <div class="flex flex-col gap-2">
-          <button
-            type="button"
-            class="glass-inner flex items-center justify-between px-3 py-2 text-xs font-medium text-[#1D1D1F] transition-colors hover:bg-black/[0.04] dark:text-[#F5F5F7] dark:hover:bg-white/[0.08]"
-            @click="copyEmail"
-          >
-            <span class="inline-flex items-center gap-2 truncate">
-              <Mail class="h-3.5 w-3.5 shrink-0 text-[#6E6E73]" />
-              <span class="truncate">{{ profile.email }}</span>
-            </span>
-            <Check v-if="copiedEmail" class="h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
-            <Copy v-else class="h-3.5 w-3.5 shrink-0 text-[#86868B]" />
-          </button>
+        <div class="space-y-3.5">
+          <h2 class="text-xs font-semibold text-[#86868B]">
+            联系方式
+          </h2>
+          <div class="flex flex-col gap-2">
+            <button
+              type="button"
+              class="glass-inner flex items-center justify-between px-3 py-2 text-xs font-medium text-[#1D1D1F] transition-colors hover:bg-black/[0.04] dark:text-[#F5F5F7] dark:hover:bg-white/[0.08]"
+              @click="copyEmail"
+            >
+              <span class="inline-flex items-center gap-2 truncate">
+                <Mail class="h-3.5 w-3.5 shrink-0 text-[#6E6E73]" />
+                <span class="truncate">{{ profile.email }}</span>
+              </span>
+              <Check v-if="copiedEmail" class="h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+              <Copy v-else class="h-3.5 w-3.5 shrink-0 text-[#86868B]" />
+            </button>
 
-          <button
-            type="button"
-            class="glass-inner flex items-center justify-between px-3 py-2 text-xs font-medium text-[#1D1D1F] transition-colors hover:bg-black/[0.04] dark:text-[#F5F5F7] dark:hover:bg-white/[0.08]"
-            @click="copyWechat"
-          >
-            <span class="inline-flex items-center gap-2 truncate">
-              <MessageSquare class="h-3.5 w-3.5 shrink-0 text-[#6E6E73]" />
-              <span class="truncate">微信：{{ profile.wechatId }}</span>
-            </span>
-            <Check v-if="copiedWechat" class="h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
-            <Copy v-else class="h-3.5 w-3.5 shrink-0 text-[#86868B]" />
-          </button>
+            <button
+              type="button"
+              class="glass-inner flex items-center justify-between px-3 py-2 text-xs font-medium text-[#1D1D1F] transition-colors hover:bg-black/[0.04] dark:text-[#F5F5F7] dark:hover:bg-white/[0.08]"
+              @click="copyWechat"
+            >
+              <span class="inline-flex items-center gap-2 truncate">
+                <MessageSquare class="h-3.5 w-3.5 shrink-0 text-[#6E6E73]" />
+                <span class="truncate">微信：{{ profile.wechatId }}</span>
+              </span>
+              <Check v-if="copiedWechat" class="h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+              <Copy v-else class="h-3.5 w-3.5 shrink-0 text-[#86868B]" />
+            </button>
 
-          <a
-            :href="profile.github"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-inner flex items-center justify-between px-3 py-2 text-xs font-medium text-[#1D1D1F] transition-colors hover:bg-black/[0.04] dark:text-[#F5F5F7] dark:hover:bg-white/[0.08]"
-          >
-            <span class="inline-flex items-center gap-2">
-              <Github class="h-3.5 w-3.5 text-[#6E6E73]" />
-              github.com/fengyinxqy
-            </span>
-            <ArrowUpRight class="h-3.5 w-3.5 text-[#86868B]" />
-          </a>
+            <a
+              :href="profile.github"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="glass-inner flex items-center justify-between px-3 py-2 text-xs font-medium text-[#1D1D1F] transition-colors hover:bg-black/[0.04] dark:text-[#F5F5F7] dark:hover:bg-white/[0.08]"
+            >
+              <span class="inline-flex items-center gap-2">
+                <Github class="h-3.5 w-3.5 text-[#6E6E73]" />
+                github.com/fengyinxqy
+              </span>
+              <ArrowUpRight class="h-3.5 w-3.5 text-[#86868B]" />
+            </a>
+          </div>
         </div>
+
+        <p class="text-xs text-[#86868B]">
+          点击邮箱或微信号可一键复制
+        </p>
       </div>
     </section>
 
