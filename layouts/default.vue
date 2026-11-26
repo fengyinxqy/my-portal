@@ -45,5 +45,6 @@ onUnmounted(() => {
     <SearchModal v-model="isSearchOpen" />
     <ImageLightbox />
     <FloatingMusicPlayer />
+    <VersionUpdateToast />
   </div>
 </template>

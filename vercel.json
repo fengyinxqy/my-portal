@@ -3,5 +3,16 @@
   "framework": "nuxtjs",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "buildCommand": "pnpm generate",
-  "outputDirectory": ".output/public"
+  "outputDirectory": ".output/public",
+  "headers": [
+    {
+      "source": "/version.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    }
+  ]
 }
