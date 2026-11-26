@@ -97,38 +97,40 @@ const { data: latestUpdates } = await useAsyncData('home-latest-now', () =>
       <!-- Hero Card (8 cols) -->
       <div class="bento-card md:col-span-8 flex flex-col justify-between gap-6">
         <div class="space-y-4">
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3.5">
             <img
               :src="profile.avatar"
               :alt="profile.name"
-              class="h-14 w-14 shrink-0 rounded-full border border-black/[0.08] object-cover dark:border-white/15"
+              class="h-12 w-12 shrink-0 rounded-full border border-black/[0.08] object-cover dark:border-white/15"
             />
             <div>
-              <h1 class="text-2xl font-bold tracking-[-0.03em] text-[#1D1D1F] sm:text-[28px] dark:text-[#F5F5F7]">
+              <div class="text-base font-semibold tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7]">
                 {{ profile.name }}
-              </h1>
-              <div class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#6E6E73] dark:text-[#A1A1A6]">
+              </div>
+              <div class="mt-0.5 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs text-[#6E6E73] dark:text-[#A1A1A6]">
                 <span>{{ profile.role }}</span>
-                <span class="inline-flex items-center gap-1 text-xs">
-                  <MapPin class="h-3.5 w-3.5" />
+                <span class="inline-flex items-center gap-1">
+                  <MapPin class="h-3 w-3" />
                   {{ profile.location }}
                 </span>
               </div>
             </div>
           </div>
 
-          <p class="max-w-xl text-[15px] leading-relaxed text-[#515154] dark:text-[#D1D1D6]">
-            {{ profile.tagline }}
-          </p>
+          <div class="space-y-2 pt-1">
+            <h1 class="text-2xl font-bold tracking-[-0.03em] text-[#1D1D1F] sm:text-[26px] leading-snug dark:text-[#F5F5F7]">
+              {{ profile.slogan }}
+            </h1>
+            <p class="max-w-xl text-sm leading-relaxed text-[#515154] dark:text-[#C7C7CC]">
+              {{ profile.tagline }}
+            </p>
+          </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-3">
+        <div>
           <NuxtLink to="/resume" class="apple-btn-primary">
             <FileText class="h-4 w-4" />
             查看简历
-          </NuxtLink>
-          <NuxtLink to="/projects" class="apple-btn-secondary">
-            项目经历
             <ArrowRight class="h-4 w-4" />
           </NuxtLink>
         </div>
